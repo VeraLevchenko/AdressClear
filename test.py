@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtWidgets
 import re
 
 import func
+import funcKorpus
 
 # app = QtWidgets.QApplication([])
 # wb_patch = QtWidgets.QFileDialog.getOpenFileName()[0]
@@ -18,7 +19,6 @@ street_list = wb2.active
 
 wb3 = load_workbook("D:/AdressClear/Src/snt_list.xlsx")
 snt_list = wb3.active
-
 
 def get_snt(input_adress):
     snt = "None"
@@ -43,10 +43,9 @@ def get_street(input_adress):
     return street
 
 
-
-
-# перебирает адреса
-for i in range(1, table_input.max_row + 1):
+for i in range(1, 12 + 1):
+    build = "None"
+    korpus = "None"
     input_adress = str(table_input[i][16].value)
     print(input_adress)
     input_adress = input_adress.replace("-", '')
@@ -56,11 +55,15 @@ for i in range(1, table_input.max_row + 1):
     input_adress = input_adress.replace("обл.Кемеровская", '')
     # print(input_adress)
     snt = get_snt(input_adress)
-    # print(snt)
+    print("СНТ ", snt)
     street = get_street(input_adress)
     print("Улица: ", street)
     if street != "None":
         build = func.getBuild(input_adress, street)
         print("Здание", build)
+        if build != "None":
+            korpus = funcKorpus.getKorpus(input_adress)
+            print("Корпус", korpus)
+
 
 
