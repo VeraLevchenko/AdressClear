@@ -1,8 +1,23 @@
-def generate_list(input_adress, street): # генерирует список сочетаний для поиска зданий
+def generate_list_build(street, max_number_build): # генерирует список сочетаний для поиска зданий
     liters = ["А", "Б", "В", "Г", "Д", "Е", "Е", "Ж", "З", "а", "б", "в", "г", "д", "ж", "з", ""]
     names = ["д", "д.", "дом", "здание", "зд.", "дом.", "строение", ""]
-    list_build_data_liter = [f"{street},{name}{i}{liter}" for name in names for i in range(200, 0, -1) for liter in liters]
+    list_build_data_liter = [f"{street},{name}{i}{liter}" for name in names for i in range(max_number_build, 0, -1) for liter in liters]
     return(list_build_data_liter, liters)
+
+def generate_list_korpus(max_number): # генерирует список сочетаний для поиска зданий
+    liters = ["А", "Б", "В", "Г", "Д", "Е", "Е", "Ж", "З", "а", "б", "в", "г", "д", "ж", "з", ""]
+    names = ["К", "корпус", "корп", "к.", "блок", "корп.", "Корпус"]
+    # liters = ["А", "Б", ""]
+    # names = ["к.", "корпус"]
+    list_build_data_liter = [f"{name}{i}{liter}" for name in names for i in range(max_number, 0, -1) for liter in liters]
+    return(list_build_data_liter, liters)
+
+def generate_list_garag(max_number): # генерирует список сочетаний для поиска помещений (гаражей)
+    liters = ["А", "Б", "В", "Г", "Д", "Е", "Е", "Ж", "З", "а", "б", "в", "г", "д", "ж", "з", ""]
+    names = ["помещение(гараж)", "помещение", "пом.", "гаражпод", "гаража", "под",
+             "пом", "гараж", "номербокса(ячейки)", "номер", "бокс", "гар.", "г.", "гараж.", "гараж."]
+    list_garag_data_liter = [f"{name}{i}{liter}" for name in names for i in range(max_number, 0, -1) for liter in liters]
+    return(list_garag_data_liter, liters)
 
 def get_number_build(input_adress, generate_adress ):  # возвращает найденную строку со значением улицы и здания "Кирова,16Г"
     number_build = "None"
@@ -14,8 +29,7 @@ def get_number_build(input_adress, generate_adress ):  # возвращает н
             number_build = "None"
     return number_build
 
-def make_num_build(list_build_data_liter, liters, number_build):  # Возвращает номер здания "16Г"
-    max_number = 200
+def make_num_build(list_build_data_liter, liters, number_build, max_number):  # Возвращает номер здания "16Г"
     index = list_build_data_liter.index(number_build) + 1
     # -------------------------------------------------------------------------------------
     if index % len(liters) == 0:
@@ -40,13 +54,37 @@ def make_num_build(list_build_data_liter, liters, number_build):  # Возвра
     build = f"{number}{liter_rez}"
     return build
 
+
 def getBuild(input_adress, street):     # Главная функция - возвращает номер здания
-    list_build_data_liter, liters = generate_list(input_adress, street)
+    max_number_build = 200
+    list_build_data_liter, liters = generate_list_build(street, max_number_build)
     number_build = get_number_build(input_adress, list_build_data_liter)
     number = number_build
     if number_build != "None":
-        number = make_num_build(list_build_data_liter, liters, number_build)
+        number = make_num_build(list_build_data_liter, liters, number_build, max_number_build)
         # print("Адрес здания: ", number_build)
         # print("Номер: ", number)
     return number
 
+def getKorpus(input_adress):     # Главная функция - возвращает номер корпуса
+    max_number_korpus = 200
+    list_build_data_liter, liters = generate_list_korpus(max_number_korpus)
+    number_build = get_number_build(input_adress, list_build_data_liter)
+    number = number_build
+    if number_build != "None":
+        number = make_num_build(list_build_data_liter, liters, number_build, max_number_korpus)
+        # print("Адрес здания: ", number_build)
+        # print("Номер: ", number)
+    return number
+
+
+def getGarage(input_adress):     # Главная функция - возвращает номер корпуса
+    max_number_garag = 3000
+    list_build_data_liter, liters = generate_list_garag(max_number_garag)
+    number_build = get_number_build(input_adress, list_build_data_liter)
+    number = number_build
+    if number_build != "None":
+        number = make_num_build(list_build_data_liter, liters, number_build, max_number_garag)
+        # print("Адрес здания: ", number_build)
+        # print("Номер: ", number)
+    return number
